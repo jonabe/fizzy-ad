@@ -8,10 +8,6 @@ class Bucket::View < ApplicationRecord
 
   validate :must_have_filters, :must_not_be_the_default_view
 
-  def to_bucket_params
-    filters.compact_blank
-  end
-
   private
     def must_have_filters
       errors.add(:base, "must have filters") if filters.values.all?(&:blank?)
