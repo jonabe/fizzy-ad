@@ -5,11 +5,11 @@ module BucketViewsHelper
       concat hidden_field_tag(:status, params[:status])
 
       Array(params[:assignee_ids]).each do |assignee_id|
-        concat hidden_field_tag(nil, assignee_id, name: "assignee_ids[]")
+        concat hidden_field_tag("assignee_ids[]", assignee_id, id: nil)
       end
 
       Array(params[:tag_ids]).each do |tag_id|
-        concat hidden_field_tag(nil, tag_id, name: "tag_ids[]")
+        concat hidden_field_tag("tag_ids[]", tag_id, id: nil)
       end
     end
   end
