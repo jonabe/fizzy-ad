@@ -1,8 +1,9 @@
 <section id="<%= dom_id(bubble, :thread) %>"
     class="comments align-center center borderless margin flex flex-column gap-half"
     style="--bubble-color: <%= bubble.color %>"
-    data-controller="thread"
-    data-thread-my-comment-class="comment--mine">
+    data-controller="created-by-current-user"
+    data-created-by-current-user-selector-value=".comment"
+    data-created-by-current-user-differentiator-class="comment--mine">
   <%# Template Dependency: comments/comment %>
   <%# Template Dependency: rollups/rollup %>
   <%= render partial: "thread_entries/thread_entry", collection: bubble.thread.entries, cache: true %>
