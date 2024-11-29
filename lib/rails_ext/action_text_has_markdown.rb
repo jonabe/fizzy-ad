@@ -9,6 +9,14 @@ module ActionText
             markdown_#{name} || build_markdown_#{name}
           end
 
+          def #{name}_html
+            #{name}.to_html
+          end
+
+          def #{name}_plain_text
+            #{name}.to_plain_text
+          end
+
           def #{name}?
             markdown_#{name}.present?
           end

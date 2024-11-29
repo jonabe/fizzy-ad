@@ -1,3 +1,5 @@
+require "redcarpet/render_strip"
+
 module ActionText
   class Markdown < Record
     DEFAULT_RENDERER_OPTIONS = {
@@ -14,13 +16,17 @@ module ActionText
       tables: true
     }
 
-    mattr_accessor :renderer, default: Redcarpet::Markdown.new(
-      Redcarpet::Render::HTML.new(DEFAULT_RENDERER_OPTIONS), DEFAULT_MARKDOWN_EXTENSIONS)
+    mattr_accessor :renderer, default: Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(DEFAULT_RENDERER_OPTIONS), DEFAULT_MARKDOWN_EXTENSIONS)
+    mattr_accessor :plain_renderer, default: Redcarpet::Markdown.new(Redcarpet::Render::StripDown)
 
     belongs_to :record, polymorphic: true, touch: true
 
     def to_html
       (renderer.try(:call) || renderer).render(content).html_safe
+    end
+
+    def to_plain_text
+      (plain_renderer.try(:call) || plain_renderer).render(content)
     end
   end
 end

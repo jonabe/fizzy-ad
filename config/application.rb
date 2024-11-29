@@ -14,7 +14,7 @@ module Fizzy
     # Include the `lib` directory in autoload paths. Use the `ignore:` option
     # to list subdirectories that don't contain `.rb` files or that shouldn't
     # be reloaded or eager loaded.
-    config.autoload_lib ignore: %w[ assets tasks ]
+    config.autoload_lib ignore: %w[ assets tasks rails_ext ]
 
     # Configuration for the application, engines, and railties goes here.
     #
