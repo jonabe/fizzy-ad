@@ -2,6 +2,8 @@ require "test_helper"
 
 class BucketTest < ActiveSupport::TestCase
   test "revising access" do
+    buckets(:writebook).update! all_access: false
+
     buckets(:writebook).accesses.revise granted: users(:david, :jz), revoked: users(:kevin)
     assert_equal users(:david, :jz), buckets(:writebook).users
 
@@ -27,14 +29,5 @@ class BucketTest < ActiveSupport::TestCase
 
     bucket.update! all_access: true
     assert_equal accounts("37s").users, bucket.users.reload
-  end
-
-  test "visibility" do
-    assert_not buckets(:writebook).visible_to?(User.new)
-    assert buckets(:writebook).visible_to?(User.new(account: accounts("37s")))
-
-    buckets(:writebook).update! all_access: false
-    assert_not buckets(:writebook).visible_to?(User.new(account: accounts("37s")))
-    assert buckets(:writebook).visible_to?(users(:kevin))
   end
 end

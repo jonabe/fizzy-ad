@@ -22,7 +22,7 @@ class BucketsController < ApplicationController
 
   def update
     @bucket.update! bucket_params
-    @bucket.accesses.revise(granted: grantees, revoked: revokees) unless @bucket.all_access?
+    @bucket.accesses.revise granted: grantees, revoked: revokees
 
     redirect_to bubbles_path(bucket_ids: [ @bucket ])
   end

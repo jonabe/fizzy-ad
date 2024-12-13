@@ -15,7 +15,7 @@ module Bucket::Accessible
       end
 
       def revoke_from(users)
-        destroy_by user: users
+        destroy_by user: users unless proxy_association.owner.all_access?
       end
     end
 
@@ -25,10 +25,6 @@ module Bucket::Accessible
 
     after_create -> { accesses.grant_to creator }
     after_save_commit :grant_access_to_everyone
-  end
-
-  def visible_to?(user)
-    (account == user.account && all_access?) || user.bucket_ids.include?(id)
   end
 
   private

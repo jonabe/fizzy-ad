@@ -29,7 +29,7 @@
     </div>
 
     <section class="margin-block pad-inline fill-shade border-radius">
-      <menu class="flex flex-column gap margin-none pad txt-medium" data-controller="filter" data-filter-active-class="filter--active" data-filter-selected-class="selected">
+      <menu class="flex flex-column gap margin-none pad txt-medium" data-controller="filter toggle-class" data-filter-active-class="filter--active" data-filter-selected-class="selected" data-toggle-class-toggle-class="toggler--toggled">
         <li class="flex align-center gap margin-none">
           <figure class="avatar flex-item-no-shrink" style="--avatar-border-radius: 0; --avatar-size: 4ch;">
             <%= image_tag "everyone.svg", aria: { hidden: "true" }, class: "colorize--black" %>
@@ -43,7 +43,7 @@
           <hr class="separator--horizontal flex-item-grow" style="--border-color: var(--color-subtle-dark); --border-style: dashed" aria-hidden="true" />
 
           <label for="bucket_all_access" class="switch">
-            <%= form.check_box :all_access, class: "switch__input", checked: @bucket.all_access? %>
+            <%= form.check_box :all_access, class: "switch__input", checked: @bucket.all_access?, data: { action: "change->toggle-class#toggle" } %>
             <span class="switch__btn round"></span>
             <span class="for-screen-reader">Give everyone access to this project</span>
           </label>
