@@ -1,12 +1,12 @@
 <div class="flex flex-column gap-half align-center" data-controller="dialog filter-form"
     data-action="keydown.esc->dialog#close:stop click@document->dialog#closeOnClickOutside turbo:before-cache@document->dialog#close">
-  <h1 class="txt-large flex align-center gap-half">
+  <h1 class="txt-x-large margin-none-block-end">
     <% if filter.buckets.none? %>
       All projects
     <% elsif filter.buckets.one? %>
       <%= filter.buckets.first.name %>
     <% else %>
-      <%= pluralize(filter.buckets.size, "project") %>
+        <%= pluralize(filter.buckets.size, "project") %>
     <% end %>
   </h1>
 

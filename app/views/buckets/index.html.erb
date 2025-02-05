@@ -1,18 +1,21 @@
-<% @page_title = "Projects" %>
+<% @page_title = "All projects" %>
 
 <% content_for :header do %>
-  <nav>
-    <%= link_to account_users_path, class: "btn" do %>
+  <nav class="align-start">
+    <%= link_to account_users_path, class: "btn borderless flex-item-justify-start" do %>
       <%= image_tag "settings.svg", aria: { hidden: true }, size: 24 %>
       <span class="for-screen-reader">Account settings</span>
     <% end %>
 
-    <%= link_to events_path, class: "btn flex-item-justify-start" do %>
-      <%= image_tag "history.svg", aria: { hidden: true }, size: 24 %>
-      <span class="for-screen-reader">Latest activity</span>
-    <% end %>
+    <header class="flex flex-column center">
+      <div class="flex align-center gap justify-center">
+        <%= link_to "Projects", root_path %>
+        <%= link_to "Activity", events_path %>
+      </div>
+      <h1 class="txt-x-large"><%= @page_title %></h1>
+    </header>
 
-    <%= link_to new_bucket_path, class: "btn flex-item-justify-end", style: "view-transition-name: new-bucket" do %>
+    <%= link_to new_bucket_path, class: "btn flex-item-justify-end borderless", style: "view-transition-name: new-bucket" do %>
       <%= image_tag "add.svg", aria: { hidden: true }, size: 24 %>
       <span class="for-screen-reader">Add a new project</span>
     <% end %>

@@ -5,29 +5,23 @@
 
 <% content_for :header do %>
   <nav class="align-start">
-    <%= link_to root_path, class: "btn flex-item-justify-start", data: { controller: "hotkey", action: "keydown.esc@document->hotkey#click" } do %>
-      <%= image_tag "arrow-left.svg", aria: { hidden: true }, size: 24 %>
-      <span class="for-screen-reader">Go back</span>
+    <% bucket = @filter.buckets.first %>
+    <%= link_to edit_bucket_path(bucket), class: "btn borderless flex-item-justify-start" do %>
+      <%= image_tag "settings.svg", aria: { hidden: true }, size: 24 %>
+      <span class="for-screen-reader">Settings for <%= bucket.name %></span>
     <% end %>
 
-    <header class="txt-align-center">
+    <header class="flex flex-column center">
+      <div class="flex align-center gap justify-center">
+        <%= link_to "Projects", root_path %>
+        <%= link_to "Activity", events_path %>
+      </div>
       <%= render "bubbles/filters", filter: @filter %>
     </header>
 
-    <% if @filter.buckets.one? %>
-      <% bucket = @filter.buckets.first %>
-
-      <%= link_to edit_bucket_path(bucket), class: "btn flex-item-justify-end" do %>
-        <%= image_tag "settings.svg", aria: { hidden: true }, size: 24 %>
-        <span class="for-screen-reader">Settings for <%= bucket.name %></span>
-      <% end %>
-
-      <%= button_to bucket_bubbles_path(bucket), method: :post, class: "btn" do %>
-        <%= image_tag "add.svg", aria: { hidden: true }, size: 24 %>
-        <span class="for-screen-reader">Create a new bubble</span>
-      <% end %>
-    <% else %>
-      <span class="btn btn--placeholder flex-item-justify-end"></span>
+    <%= button_to bucket_bubbles_path(bucket), method: :post, class: "btn borderless", form_class: "flex-item-justify-end" do %>
+      <%= image_tag "add.svg", aria: { hidden: true }, size: 24 %>
+      <span class="for-screen-reader">Create a new bubble</span>
     <% end %>
   </nav>
 <% end %>

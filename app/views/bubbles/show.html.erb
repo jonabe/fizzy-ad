@@ -10,18 +10,17 @@
   <% end %>
 
   <nav class="align-start">
-    <%= link_to "#", class: "btn flex-item-justify-start", data: { controller: "hotkey back-navigation", action: "keydown.esc@document->hotkey#click", back_navigation_fallback_destination_value: bubbles_path(bucket_id: @bucket) } do %>
-      <%= image_tag "arrow-left.svg", aria: { hidden: true }, size: 24 %>
-      <span class="for-screen-reader">Back</span>
-    <% end %>
-
-    <header class="txt-align-center">
-      <h1 class="txt-large flex align-center gap-half">
-        <%= link_to @bucket.name, bubbles_path(bucket_ids: [ @bucket ]), class: "txt-ink txt-undecorated upad" %>
+    <header class="flex flex-column center">
+      <div class="flex align-center gap justify-center">
+        <%= link_to "Projects", root_path %>
+        <%= link_to "Activity", events_path %>
+      </div>
+      <h1 class="txt-x-large breadcrumbs">
+        <%= link_to @bucket.name, bubbles_path(bucket_ids: [ @bucket ]) %>
+        <span class="flex-item-no-shrink">▸</span>
+        <strong><%= @page_title %></strong>
       </h1>
     </header>
-
-    <span class="btn btn--placeholder flex-item-justify-end"></span>
   </nav>
 <% end %>
 

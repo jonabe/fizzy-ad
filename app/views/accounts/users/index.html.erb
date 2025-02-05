@@ -1,15 +1,21 @@
 <% @page_title = "People on the account" %>
 
 <% content_for :header do %>
-  <nav>
-    <%= link_to root_path, class: "btn flex-item-justify-start" do %>
+  <nav class="align-start">
+    <%= link_to root_path, class: "btn borderless flex-item-justify-start" do %>
       <%= image_tag "arrow-left.svg", aria: { hidden: true }, size: 24 %>
       <span class="for-screen-reader">Go back</span>
     <% end %>
 
-    <h1 class="txt-large"><%= @page_title %></h1>
+    <header class="flex flex-column center">
+      <div class="flex align-center gap justify-center">
+        <%= link_to "Projects", root_path %>
+        <%= link_to "Activity", events_path %>
+      </div>
+      <h1 class="txt-x-large"><%= @page_title %></h1>
+    </header>
 
-    <%= link_to workflows_path, class: "btn flex-item-justify-end" do %>
+    <%= link_to workflows_path, class: "btn flex-item-justify-end borderless" do %>
       <%= image_tag "bolt.svg", aria: { hidden: true }, size: 24 %>
       <span class="for-screen-reader">Workflows</span>
     <% end %>
