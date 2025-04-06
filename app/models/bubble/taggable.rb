@@ -16,7 +16,7 @@ module Bubble::Taggable
   end
 
   def tagged_with?(tag)
-    tags.include?(tag)
+    tags.include? tag
   end
 
   private
