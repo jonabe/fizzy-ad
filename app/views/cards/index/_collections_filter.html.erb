@@ -15,8 +15,8 @@
     </div>
     <%= tag.div class: "btn popup__item min-width flex-item-grow" do %>
       <span class="overflow-ellipsis">All collections</span>
+      <span class="txt-ink translucent flex-item-no-shrink flex-item-justify-end"><span class="txt-x-small txt-uppercase">GO TO</span> ›</span>
     <% end %>
-    <span class="txt-ink translucent flex-item-no-shrink"><span class="txt-x-small txt-uppercase">GO TO</span> ›</span>
   <% end %>
 
   <% Current.user.collections.order(:name).each do |collection| %>
@@ -36,9 +36,8 @@
 
       <%= link_to cards_path(collection_ids: [ collection ]), class: "btn popup__item min-width flex-item-grow" do %>
         <span class="overflow-ellipsis"><%= collection.name %></span>
+        <span class="translucent flex-item-no-shrink flex-item-justify-end"> ›</span>
       <% end %>
-  
-      <span class="translucent flex-item-no-shrink"> ›</span>
     </li>
   <% end %>
 <% end %>

@@ -44,7 +44,7 @@
     --btn-border-radius: 0.3em;
     --btn-border-size: 0;
     --btn-font-weight: 500;
-    --btn-padding: var(--inline-space-half) var(--inline-space-half) var(--inline-space-half) var(--inline-space);
+    --btn-padding: var(--inline-space-half) 0 var(--inline-space-half) var(--inline-space);
     --hover-size: 0;
     --outline-color: transparent;
 
