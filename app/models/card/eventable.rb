@@ -40,7 +40,7 @@ module Card::Eventable
 
     def track_title_change
       if title_before_last_save.present?
-        track_event "card_title_changed", particulars: { old_title: title_before_last_save, new_title: title }
+        track_event "card_card_title_changed", particulars: { old_title: title_before_last_save, new_title: title }
       end
     end
 end
