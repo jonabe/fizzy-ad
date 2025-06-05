@@ -131,15 +131,22 @@
     --column-gap: 0.7ch;
     --panel-border-color: transparent;
     --panel-border-radius: 0.2em;
-    --panel-padding: 0.6em 1.2em 0.6em 0.6em;
+    --panel-padding: 0.6em;
     --panel-size: auto;
 
     margin: var(--inline-space);
+    overflow: clip;
     position: relative;
-    /* z-index: 1; */
 
     @media (max-width: 639px) {
       --panel-size: 100%;
+    }
+
+    .card__collection {
+      border-end-end-radius: 0.3em;
+      font-size: var(--text-xx-small);
+      margin: -1.2em auto 0.8em -1.2em;
+      padding-block: 0.6em;
     }
   }
 
@@ -194,6 +201,22 @@
     text-transform: uppercase;
   }
 
+  .event__icon {
+    background-color: var(--card-color);
+    border-end-start-radius: 0.3em;
+    display: grid;
+    font-size: var(--text-xx-small);
+    margin: -1.2em -1.2em 0.8em auto;
+    padding: 0.6em 0.9em 0.6em 0.7em;
+    place-content: center;
+
+    .icon {
+      block-size: 1.4em;
+      inline-size: 1.4em;
+      grid-area: 1 / 1;
+    }
+  }
+
   .event__timestamp {
     align-self: start;
     display: grid;
@@ -206,22 +229,5 @@
 
     font-size: 1.1em;
     line-height: 1.2;
-  }
-
-  .event__icon {
-    aspect-ratio: 1;
-    background-color: var(--card-color);
-    block-size: 1.7em;
-    border-radius: 1.7em;
-    inline-size: 1.7em;
-    display: grid;
-    place-content: center;
-    margin-inline-end: -0.75em;
-
-    .icon {
-      block-size: 1.1em;
-      inline-size: 1.1em;
-      grid-area: 1 / 1;
-    }
   }
 }

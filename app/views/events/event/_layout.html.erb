@@ -1,19 +1,18 @@
 <%= link_to event.notifiable_target,
-      class: "event event--#{ event.action } #{ "event--golden" if event.card.golden? && card.doing? } panel center center-block flex-inline align-start justify-start gap position-relative",
+      class: "event event--#{ event.action } #{ "event--golden" if event.card.golden? && card.doing? } panel center center-block flex-inline align-start justify-start position-relative",
       style: "--card-color: #{ card.closed? ? "var(--color-card-complete)" : card.color }; background-color: color-mix(in srgb, var(--card-color) 10%, var(--color-canvas));
   color: color-mix(in srgb, var(--card-color) 40%, var(--color-ink)); border: 1px solid color-mix(in srgb, var(--card-color) 20%, var(--color-canvas))",
       data: { related_element_target: "related",
             related_element_group_value: card.id,
             action: "mouseover->related-element#highlight mouseout->related-element#unhighlight" } do %>
-  <div class="avatar txt-x-small flex-item-no-shrink">
-    <%= avatar_image_tag(event.creator) %>
-  </div>
-
-  <div class="flex flex-column min-width txt-small align-start txt-align-start" style="color: color-mix(in srgb, var(--card-color) 40%, var(--color-ink));">
-    <div class="flex align-start gap full-width">
-      <strong class="event__title txt-break overflow-line-clamp txt-tight-lines">
-        <%= event_action_sentence(event) %>
-      </strong>
+  <div class="flex flex-column">
+    <div class="flex align-start gap">
+      <div class="card__collection flex-inline align-start">
+        <span class="card__id"><%= card.id %></span>
+        <span class="card__collection-name">
+          <span class="overflow-ellipsis"><%= event.collection.name %></span>
+        </span>
+      </div>
 
       <% if event_column(event) == 2 %>
         <span class="event__icon flex-item-justify-end txt-reversed">
@@ -22,8 +21,18 @@
       <% end %>
     </div>
 
-    <%= yield %>
+    <div class="flex align-start gap">
+      <div class="avatar txt-x-small flex-item-no-shrink">
+        <%= avatar_image_tag(event.creator) %>
+      </div>
 
-    <span class="event__collection"><span><%= card.id %></span> · <%= event.collection.name %></span>
+      <div class="flex flex-column min-width txt-small align-start txt-align-start" style="color: color-mix(in srgb, var(--card-color) 40%, var(--color-ink));">
+        <strong class="event__title txt-break overflow-line-clamp txt-tight-lines">
+          <%= event_action_sentence(event) %>
+        </strong>
+
+        <%= yield %>
+      </div>
+    </div>
   </div>
 <% end %>
