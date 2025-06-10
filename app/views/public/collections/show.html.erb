@@ -1,5 +1,11 @@
 <% @page_title = @collection.name %>
 
+<% content_for :header do %>
+  <h1 class="txt-large overflow-ellipsis margin-none pad">
+    <span><%= @page_title %></span>
+  </h1>
+<% end %>
+
 <div class="card-columns">
   <%= render "public/collections/show/considering", collection: @collection, page: @considering %>
   <%= render "public/collections/show/doing", collection: @collection, page: @doing %>
