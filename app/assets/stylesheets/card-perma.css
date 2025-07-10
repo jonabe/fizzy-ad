@@ -58,7 +58,7 @@
     }
 
     @media (max-width: 800px) {
-      --padding-inline: 3cqmin;
+      --padding-inline: var(--main-padding);
 
       column-gap: 0;
       grid-template-areas:
@@ -155,10 +155,6 @@
         --btn-border-color: var(--card-color);
         --btn-color: var(--color-ink-inverted);
       }
-    }
-
-    @media (max-width: 580px) {
-      margin-block-start: -2ch;
     }
   }
 
