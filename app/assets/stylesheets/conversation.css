@@ -1,0 +1,89 @@
+@layer components {
+  .conversation {
+    --color-border: #fff;
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-bottom: 0;
+
+    .conversation__messages {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      height: 100%;
+      margin: 1rem;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .conversation__composer {
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      min-height: 6rem;
+      padding: 1rem;
+
+      .conversation__composer__submit {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 0;
+      }
+
+      .conversation__composer__input {
+        flex-grow: 1;
+      }
+
+      .conversation__composer__input textarea {
+        border-radius: 0.5rem;
+        border: 1px solid var(--color-border);
+        height: 100%;
+        padding: 0.5rem;
+        resize: none;
+        width: 100%;
+      }
+    }
+
+    .conversation__message {
+    }
+
+    .conversation__message--user {
+      .action-text-content {
+        border-left: 1px solid var(--color-border);
+        border-radius: 0.5rem;
+        border-top: 1px solid var(--color-border);
+        margin-left: 15%;
+        padding: 1rem;
+        text-align: right;
+      }
+
+      details {
+        margin-top: 0.5rem;
+
+        summary {
+          text-align: right;
+        }
+      }
+    }
+
+    .conversation__message--assistant {
+      .action-text-content {
+        padding: 1rem;
+        text-align: left;
+        margin-right: 15%;
+        border-right: 1px solid var(--color-border);
+        border-top: 1px solid var(--color-border);
+        border-radius: 0.5rem;
+      }
+
+      details {
+        margin-top: 0.5rem;
+
+        summary {
+          text-align: left;
+        }
+      }
+    }
+  }
+}

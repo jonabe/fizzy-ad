@@ -115,6 +115,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :conversation, only: %i[ show create ] do
+    scope module: :conversations do
+      resource :messages, only: %i[ create ]
+    end
+  end
+
   namespace :my do
     resources :pins
   end
@@ -175,6 +181,10 @@ Rails.application.routes.draw do
     polymorphic_path(event.target, options)
   end
 
+  # resolve "Conversation::Message" do |message, options|
+  #   polymorphic_path([ :conversations, :messages ], options)
+  # end
+  #
   get "up", to: "rails/health#show", as: :rails_health_check
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "pwa#service_worker"
