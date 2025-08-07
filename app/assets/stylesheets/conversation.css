@@ -19,11 +19,13 @@
   }
 
   .conversation__header {
+    align-items: center;
     backdrop-filter: blur(24px);
+    display: flex;
     inset: 0 0 auto 0;
+    justify-content: space-between;
     padding: var(--block-space);
     position: absolute;
-    text-align: center;
   }
 
   .conversation__input {
