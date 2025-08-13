@@ -64,7 +64,7 @@ class Ai::ListCommentsTool < Ai::Tool
     ordered_by = OrderClause.parse(
       params[:ordered_by],
       defaults: { created_at: :desc, id: :desc },
-      permitted: %w[id created_at]
+      permitted_columns: %w[id created_at]
     )
 
     # TODO: The serialization here is temporary until we add an API,

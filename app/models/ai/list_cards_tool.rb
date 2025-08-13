@@ -78,7 +78,7 @@ class Ai::ListCardsTool < Ai::Tool
     ordered_by = OrderClause.parse(
       params[:ordered_by],
       defaults: { id: :desc },
-      permitted: %w[id created_at last_active_at]
+      permitted_columns: %w[id created_at last_active_at]
     )
 
     # TODO: The serialization here is temporary until we add an API,
