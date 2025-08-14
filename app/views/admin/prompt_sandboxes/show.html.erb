@@ -1,39 +1,39 @@
-<div style="text-align: left;">
-  <h1>Prompt Debug</h1>
+<div class="txt-align-start">
+  <h1 class="margin-block">Prompt Debug</h1>
 
   <%= form_with url: admin_prompt_sandbox_path, method: :post do |form| %>
-    <div class="field">
+    <div class="margin-block">
       <%= form.label :prompt, "Prompt:" %>
-      <%= form.text_area :prompt, value: @prompt, rows: 20, cols: 80, style: "width: 100%; font-family: monospace;" %>
+      <%= form.text_area :prompt, value: @prompt, rows: 20, cols: 80, class: "input" %>
     </div>
 
-    <div class="field">
+    <div class="margin-block">
       <%= form.label :day, "Date:" %>
-      <%= form.date_field :day, value: @day_timeline.day.to_date %>
+      <%= form.date_field :day, value: @day_timeline.day.to_date, class: "input" %>
     </div>
 
-    <div class="field">
+    <div class="margin-block">
       <%= form.label :llm_model, "LLM Model:" %>
       <%= form.select :llm_model,
             options_for_select(llm_model_options, @llm_model),
-            {} %>
+            {}, class: "input input--select" %>
     </div>
 
     <div class="actions">
-      <%= form.submit "Generate Summary", class: "btn btn-primary" %>
+      <%= form.submit "Generate Summary", class: "btn btn--link" %>
     </div>
 
   <% end %>
 
-  <div class="summary" style="margin-top: 2rem; padding: 1rem; border: 1px solid #ddd; background-color: #f9f9f9;">
-    <h2>Summary</h2>
+  <div class="margin-block fill-shade txt-ink border border-radius pad">
+    <h2 class="margin-block">Summary</h2>
     <div class="summary-content">
       <%= @activity_summary&.to_html %>
     </div>
   </div>
 
-  <div class="summary" style="margin-top: 2rem; padding: 1rem; border: 1px solid #ddd; background-color: #f9f9f9;">
-    <h2>Summarized Contents</h2>
+  <div class="margin-block fill-shade txt-ink border border-radius pad">
+    <h2 class="margin-block">Summarized Contents</h2>
     <div class="summary-content">
     <pre>
 <%= @day_timeline.summarizable_content %>
