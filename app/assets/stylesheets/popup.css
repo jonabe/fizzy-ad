@@ -10,11 +10,16 @@
     max-inline-size: min(55ch, calc(100dvw - var(--block-space-double)));
     overflow: auto;
     position: absolute;
-    transform: translateX(-50%);
+    translate: -50% 0;
     z-index: var(--z-popup);
 
     &[open] {
       display: flex;
+    }
+
+    &.orient-left {
+      inset-inline: auto 0;
+      translate: 0;
     }
 
     &:has(.popup__footer) {
