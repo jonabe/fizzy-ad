@@ -3,7 +3,6 @@
     --panel-border-color: var(--color-selected-dark);
     --panel-border-radius: 1.4em;
     --panel-size: 45ch;
-    --fizzy-menu-gap: 1ch;
 
     align-items: stretch;
     box-shadow: 0 0 0 1px oklch(var(--lch-blue-medium) / 5%),
