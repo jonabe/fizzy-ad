@@ -1,6 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 import { differenceInDays } from "helpers/date_helpers"
 
+const DEFAULT_LOCALE = "en-US"
+
 export default class extends Controller {
   static targets = [ "time", "date", "datetime", "shortdate", "ago", "indays", "daysago", "agoorweekday", "timeordate" ]
   static values = { refreshInterval: Number }
@@ -9,14 +11,14 @@ export default class extends Controller {
   #timer
 
   initialize() {
-    this.timeFormatter = new Intl.DateTimeFormat("en-US", { timeStyle: "short" })
-    this.dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "long" })
-    this.shortdateFormatter = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" })
-    this.datetimeFormatter = new Intl.DateTimeFormat("en-US", { timeStyle: "short", dateStyle: "short" })
+    this.timeFormatter = new Intl.DateTimeFormat(DEFAULT_LOCALE, { timeStyle: "short" })
+    this.dateFormatter = new Intl.DateTimeFormat(DEFAULT_LOCALE, { dateStyle: "long" })
+    this.shortdateFormatter = new Intl.DateTimeFormat(DEFAULT_LOCALE, { month: "short", day: "numeric" })
+    this.datetimeFormatter = new Intl.DateTimeFormat(DEFAULT_LOCALE, { timeStyle: "short", dateStyle: "short" })
     this.agoFormatter = new AgoFormatter()
     this.daysagoFormatter = new DaysAgoFormatter()
-    this.datewithweekdayFormatter = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" })
-    this.datewithweekdayFormatter = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" })
+    this.datewithweekdayFormatter = new Intl.DateTimeFormat(DEFAULT_LOCALE, { weekday: "long", month: "long", day: "numeric" })
+    this.datewithweekdayFormatter = new Intl.DateTimeFormat(DEFAULT_LOCALE, { weekday: "long", month: "long", day: "numeric" })
     this.indaysFormatter = new InDaysFormatter()
     this.agoorweekdayFormatter = new DaysAgoOrWeekdayFormatter()
     this.timeordateFormatter = new TimeOrDateFormatter()
@@ -138,7 +140,7 @@ class DaysAgoOrWeekdayFormatter {
     if (days <= 1) {
       return new DaysAgoFormatter().format(date)
     } else {
-      return new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" }).format(date)
+      return new Intl.DateTimeFormat(DEFAULT_LOCALE, { weekday: "long", month: "long", day: "numeric" }).format(date)
     }
   }
 }
@@ -158,9 +160,9 @@ class TimeOrDateFormatter {
     const days = differenceInDays(date, new Date())
 
     if (days >= 1) {
-      return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(date)
+      return new Intl.DateTimeFormat(DEFAULT_LOCALE, { month: "short", day: "numeric" }).format(date)
     } else {
-      return new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(date)
+      return new Intl.DateTimeFormat(DEFAULT_LOCALE, { timeStyle: "short" }).format(date)
     }
   }
 }
