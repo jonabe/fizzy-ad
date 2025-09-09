@@ -1,14 +1,4 @@
 GIT
-  remote: https://github.com/basecamp/activerecord-tenanted
-  revision: cd5a8dc0d461fc24ee5731984c597d02e1e80f43
-  specs:
-    activerecord-tenanted (0.1.0)
-      activerecord (>= 8.1.alpha)
-      rack-contrib (>= 2.5.0)
-      railties (>= 8.1.alpha)
-      zeitwerk
-
-GIT
   remote: https://github.com/basecamp/file_repository
   revision: 8c8d1594f3ec7e8c0938e6a7f7def521692344e4
   specs:
@@ -226,6 +216,11 @@ GEM
       activemodel (>= 5.0.0.a)
       activesupport (>= 5.0.0.a)
       builder (~> 3.1)
+    activerecord-tenanted (0.2.0)
+      activerecord (>= 8.1.alpha)
+      rack-contrib (>= 2.5.0)
+      railties (>= 8.1.alpha)
+      zeitwerk
     activeresource (6.1.4)
       activemodel (>= 6.0)
       activemodel-serializers-xml (~> 1.0)
@@ -604,7 +599,7 @@ PLATFORMS
   x86_64-mingw32
 
 DEPENDENCIES
-  activerecord-tenanted!
+  activerecord-tenanted
   activeresource
   aws-sdk-s3
   bcrypt (~> 3.1.7)
