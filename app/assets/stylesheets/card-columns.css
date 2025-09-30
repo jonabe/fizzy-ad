@@ -466,12 +466,6 @@
       @media (min-width: 640px) {
         --text-xx-large: 1.6em;
       }
-
-      &:nth-child(1n) { rotate: -1deg; }
-      &:nth-child(1) { rotate: 0deg; }
-      &:nth-child(2n) { rotate: 1deg; }
-      &:nth-child(3n) { rotate: -0.5deg; }
-      &:nth-child(4n) { rotate: 0.5deg; }
     }
 
     .card__collection {
