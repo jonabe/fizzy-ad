@@ -210,11 +210,11 @@
       .btn--circle,
       ~ .btn--circle,
       ~ .cards__expander-menu .btn--circle {
-        transition: visibilty 300ms ease-in-out;
-        visibility: hidden;
+        transition: opacity 300ms ease-in-out;
+        opacity: 0;
 
         .cards:hover & {
-          visibility: visible;
+          opacity: 1;
         }
       }
     }
