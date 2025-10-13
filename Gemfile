@@ -50,6 +50,7 @@ gem "yabeda-rails"
 gem "webrick" # required for yabeda-prometheus metrics server
 gem "prometheus-client-mmap", "~> 1.1"
 gem "autotuner"
+gem "benchmark" # indirect dependency, being removed from Ruby 3.5 stdlib so here to quash warnings
 
 # AI
 gem "ruby_llm", git: "https://github.com/crmne/ruby_llm.git"
