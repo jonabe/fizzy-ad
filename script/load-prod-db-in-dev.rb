@@ -24,7 +24,8 @@ Process.fork do
   FileUtils.mkdir_p(File.dirname(path), verbose: true)
   FileUtils.cp original_dbfile, path, verbose: true
 
-  ActiveRecord::Tenanted::DatabaseTasks.migrate_all
+  puts "Running migrations..."
+  system "bin/rails db:migrate"
 end
 Process.wait
 
