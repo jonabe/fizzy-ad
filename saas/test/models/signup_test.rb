@@ -30,6 +30,8 @@ class SignupTest < ActiveSupport::TestCase
 
   test "#complete" do
     ::Account.any_instance.expects(:setup_customer_template).once
+    Queenbee::Remote::Account.any_instance.stubs(:save).returns(true)
+
     ::Current.without_account do
       signup = Signup.new(
         full_name: "Kevin",

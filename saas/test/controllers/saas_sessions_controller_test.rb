@@ -5,7 +5,6 @@ class SaasSessionsControllerTest < ActionDispatch::IntegrationTest
     untenanted do
       assert_difference -> { Identity.count }, +1 do
         assert_difference -> { MagicLink.count }, +1 do
-          puts "BEFORE!"
           post session_path,
             params: { email_address: "nonexistent-#{SecureRandom.hex(6)}@example.com" },
             headers: http_basic_auth_headers("testname", "testpassword")

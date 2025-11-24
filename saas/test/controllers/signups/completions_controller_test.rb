@@ -18,6 +18,8 @@ class Signup::CompletionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create" do
+    Queenbee::Remote::Account.any_instance.stubs(:save).returns(true)
+
     untenanted do
       post saas.signup_completion_path, params: {
         signup: {
