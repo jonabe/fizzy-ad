@@ -9,7 +9,7 @@
         data: {
           bar_target: "searchInput",
           action: "keydown.enter->bar#showModalAndSubmit:prevent keydown.esc->bar#reset" } %>
-  <button class="search__reset btn btn--circle borderless" data-action="bar#reset">
+  <button class="search__reset btn btn--circle borderless" data-action="bar#clearInput">
     <%= icon_tag "close" %>
     <span class="for-screen-reader">Close search</span>
   </button>

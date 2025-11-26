@@ -109,9 +109,16 @@
       aspect-ratio: 1;
       padding: 0.5em;
 
+      kbd,
       span:last-of-type {
         display: none;
       }
+    }
+  }
+
+  @media (min-width: 640px) {
+    .btn--circle-mobile .icon--mobile-only {
+      display: none !important;
     }
   }
 
@@ -218,6 +225,7 @@
       }
     }
   }
+
 
   /* Button groups
   /* ------------------------------------------------------------------------ */

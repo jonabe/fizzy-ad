@@ -9,9 +9,38 @@ module ColumnsHelper
       data: { turbo_frame: "_top" }
   end
 
+  def column_tag(id:, name:, drop_url:, collapsed: true, selected: nil, data: {}, **properties, &block)
+    classes = token_list("cards", properties.delete(:class), "is-collapsed": collapsed)
+
+    data = {
+      drag_and_drop_target: "container",
+      navigable_list_target: "item",
+      column_name: name,
+      drag_and_drop_url: drop_url
+    }.merge(data)
+
+    data[:action] = token_list(
+      "turbo:before-morph-attribute->collapsible-columns#preventToggle",
+      "focus->navigable-list#select",
+      data.delete(:action)
+    )
+
+    tag.section(id: id, class: classes, tabindex: "0", "aria-selected": selected, data: data, **properties) do
+      tag.div(class: "cards__transition-container", data: {
+        controller: "navigable-list",
+        navigable_list_supports_horizontal_navigation_value: "false",
+        navigable_list_prevent_handled_keys_value: "true",
+        navigable_list_auto_select_value: "false",
+        navigable_list_actionable_items_value: "true",
+        navigable_list_only_act_on_focused_items_value: "true",
+        action: "keydown->navigable-list#navigate"
+      }, &block)
+    end
+  end
+
   def column_frame_tag(id, src: nil, data: {}, **options, &block)
     data = data.reverse_merge \
-      "drag-and-drop-refresh": true,
+      drag_and_drop_refresh: true,
       controller: "frame",
       action: "turbo:before-frame-render->frame#morphRender turbo:before-morph-element->frame#morphReload"
     options[:refresh] = :morph if src.present?

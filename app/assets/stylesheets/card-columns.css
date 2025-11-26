@@ -67,6 +67,7 @@
     --column-color: color-mix(in srgb, var(--card-color) 15%, var(--color-canvas));
 
     inline-size: var(--column-width-expanded);
+    outline: none;
     position: relative;
     scroll-snap-align: start;
 
@@ -110,7 +111,6 @@
         }
       }
     }
-
 
     @media (any-hover: hover) {
       .card:has(.card__background img:not([src=""])):hover .card__background img:not([src=""]) {
@@ -171,6 +171,15 @@
 
     .cards--grid & {
       display: contents;
+    }
+
+    [aria-selected] & .card[aria-selected] {
+      outline: var(--focus-ring-size) solid var(--color-selected-dark);
+      outline-offset: var(--focus-ring-offset);
+
+      @media (prefers-color-scheme: dark) {
+        outline-color: oklch(var(--lch-blue-medium));
+      }
     }
   }
 
@@ -429,9 +438,7 @@
 
     /* Cover bubbles and cards on small viewports */
     @media (max-width: 639px) {
-      &:not(.cards--closed &) {
-        margin-inline: calc(-1 * var(--cards-gap) - var(--main-padding));
-      }
+      margin-inline: calc(-1 * var(--cards-gap) - var(--main-padding));
     }
 
     &, .cards__filter {
@@ -650,6 +657,7 @@
   /* On Deck (Not Now)
   /* ------------------------------------------------------------------------ */
 
+  .cards--closed,
   .cards--on-deck {
     --card-color: var(--color-ink-light) !important;
 
@@ -662,10 +670,18 @@
     }
   }
 
+  /* Closed (Done)
+  /* ------------------------------------------------------------------------ */
+
+  .cards--closed {
+
+  }
+
   /* Doing
   /* -------------------------------------------------------------------------- */
 
   /* Surface a mini bubble if there are cards with bubbles inside */
+  .cards--considering:has(.bubble:not([hidden])),
   .cards--doing.is-collapsed:has(.bubble:not([hidden])) {
     .cards__transition-container {
       --bubble-color: var(--card-color, oklch(var(--lch-blue-medium)));
@@ -684,6 +700,11 @@
         position: absolute;
         translate: 20% -20%;
         z-index: 1;
+      }
+
+      .cards--considering &:before {
+        inset: 0 auto auto 0;
+        translate: 100% 75%;
       }
     }
   }

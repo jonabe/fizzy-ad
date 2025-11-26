@@ -22,7 +22,6 @@ class CardsController < ApplicationController
 
   def update
     @card.update! card_params
-    redirect_to @card
   end
 
   def destroy

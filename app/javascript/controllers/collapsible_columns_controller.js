@@ -40,6 +40,13 @@ export default class extends Controller {
     await this.#restoreColumnsDisablingTransitions()
   }
 
+  focusOnColumn({ target }) {
+    if (this.#isCollapsed(target)) {
+      this.#collapseAllExcept(target)
+      this.#expand(target)
+    }
+  }
+
   async #restoreColumnsDisablingTransitions() {
     this.#disableTransitions()
     this.#restoreColumns()

@@ -74,9 +74,13 @@
     gap: 0.25ch;
     max-inline-size: 100%;
     opacity: 1;
-    padding: 0.1em 0.12em;
-    postion: relative;
+    padding: 0.1em 0.36em 0.1em 0.12em;
+    position: relative;
     transition: opacity 100ms ease-in-out, transform 150ms ease-in-out;
+
+    &:has(span.txt-small.txt-medium) { /* emoji only reactions */
+      padding: 0.1em 0.12em;
+    }
 
     .btn {
       font-size: 0.6em;

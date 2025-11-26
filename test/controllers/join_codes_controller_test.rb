@@ -25,7 +25,7 @@ class JoinCodesControllerTest < ActionDispatch::IntegrationTest
     get join_path(code: @join_code.code, script_name: @account.slug)
 
     assert_response :gone
-    assert_in_body "This join code has no invitations left on it"
+    assert_in_body "That code is all used up"
   end
 
   test "create" do

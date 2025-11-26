@@ -28,7 +28,7 @@
       </header>
 
       <div class="card__body justify-space-between">
-        <%= render "public/cards/show/title", card: @card %>
+        <%= render "public/cards/show/content", card: @card %>
         <%= render "cards/display/public_preview/columns", card: @card if @card.open? %>
       </div>
 

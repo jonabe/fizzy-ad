@@ -12,7 +12,7 @@ class Notification < ApplicationRecord
 
   after_create_commit :broadcast_unread
   after_destroy_commit :broadcast_read
-  after_create_commit :bundle
+  after_create :bundle
 
   scope :preloaded, -> { preload(:creator, :account, source: [ :board, :creator ]) }
 

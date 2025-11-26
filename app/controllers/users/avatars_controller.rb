@@ -7,8 +7,12 @@ class Users::AvatarsController < ApplicationController
   before_action :ensure_permission_to_administer_user, only: :destroy
 
   def show
-    if stale? @user, cache_control: { max_age: (30.minutes unless Current.user == @user), stale_while_revalidate: 1.week }.compact
-      render_avatar_or_initials
+    if @user.system?
+      redirect_to view_context.image_path("system_user.png")
+    elsif @user.avatar.attached?
+      redirect_to rails_blob_url(@user.avatar.variant(:thumb), disposition: "inline")
+    elsif stale? @user, cache_control: cache_control
+      render_initials
     end
   end
 
@@ -26,11 +30,11 @@ class Users::AvatarsController < ApplicationController
       head :forbidden unless Current.user.can_change?(@user)
     end
 
-    def render_avatar_or_initials
-      if @user.avatar.attached?
-        send_blob_stream @user.avatar
+    def cache_control
+      if @user == Current.user
+        {}
       else
-        render_initials
+        { max_age: 30.minutes, stale_while_revalidate: 1.week }
       end
     end
 

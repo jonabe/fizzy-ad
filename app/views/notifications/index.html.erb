@@ -13,30 +13,8 @@
 
 <div data-controller="badge navigable-list" data-badge-unread-class="unread" data-action="keydown@document->navigable-list#navigate" data-navigable-list-actionable-items-value="true"
       data-navigable-list-focus-on-selection-value="false">
-  <section class="notifications-list panel panel--wide center borderless unpad flex flex-column gap-half">
-    <% if @unread.any? %>
-      <div class="flex align-center justify-space-between margin-block-start margin-block-end-half">
-        <h2 class="txt-medium txt-uppercase txt-alert">New for you</h2>
-        <%= button_to "Mark all as read", bulk_reading_path, class: "btn txt-small", form: { data: { turbo: false } }, data: { action: "badge#clear" } %>
-      </div>
-    <% else %>
-      <div class="notifications-list__empty-message pad border-radius border translucent" style="--border-style: dashed; --border-color: var(--color-ink); --border-radius: 0.2em;">
-        <strong>Nothing new for you.</strong>
-      </div>
-    <% end %>
-
-    <div id="notifications_list" contents>
-      <%= render partial: "notifications/index/notification", collection: @unread, cached: true %>
-    </div>
-  </section>
-
-  <section class="notifications-list notifications-list--read panel panel--wide center borderless unpad flex flex-column gap-half margin-block-start">
-    <h2 class="txt-medium margin-block-start-double margin-block-end-half txt-uppercase translucent">Previously seen</h2>
-
-    <div id="notifications_list_read" contents>
-      <%= render partial: "notifications/index/notification", collection: @page.records, cached: true %>
-    </div>
-  </section>
+  <%= render "notifications/index/unread_notifications", unread: @unread if @unread %>
+  <%= render "notifications/index/read_notifications", page: @page %>
 </div>
 
 <%= notifications_next_page_link(@page) if @page.records.any? %>

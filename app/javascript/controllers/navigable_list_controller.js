@@ -8,11 +8,22 @@ export default class extends Controller {
     selectionAttribute: { type: String, default: "aria-selected" },
     focusOnSelection: { type: Boolean, default: true },
     actionableItems: { type: Boolean, default: false },
-    reverseNavigation: { type: Boolean, default: false }
+    reverseNavigation: { type: Boolean, default: false },
+    supportsHorizontalNavigation: { type: Boolean, default: true },
+    supportsVerticalNavigation: { type: Boolean, default: true },
+    hasNestedNavigation: { type: Boolean, default: false },
+    preventHandledKeys: { type: Boolean, default: false },
+    autoSelect: { type: Boolean, default: true },
+    autoScroll: { type: Boolean, default: true },
+    onlyActOnFocusedItems: { type: Boolean, default: false }
   }
 
   connect() {
-    this.reset()
+    if (this.autoSelectValue) {
+      this.reset()
+    } else {
+      this.#activateManualSelection()
+    }
   }
 
   // Actions
@@ -27,10 +38,11 @@ export default class extends Controller {
 
   navigate(event) {
     this.#keyHandlers[event.key]?.call(this, event)
+    this.#relayNavigationToParentNavigableList(event)
   }
 
   select({ target }) {
-    this.#setCurrentFrom(target)
+    this.selectItem(target, true)
   }
 
   selectCurrentOrReset(event) {
@@ -49,12 +61,109 @@ export default class extends Controller {
     this.#setCurrentFrom(this.#visibleItems[this.#visibleItems.length - 1])
   }
 
+  deselectWhenClickingOutside(event) {
+    if (this.element.contains(event.target)) {
+      return
+    }
+
+    this.#clearSelection()
+  }
+
+  // Public
+
+  async selectItem(item, skipFocus = false) {
+    await this.#selectCurrentElementInParent()
+
+    this.#clearSelection()
+    item.setAttribute(this.selectionAttributeValue, "true")
+    this.currentItem = item
+    this.#refreshActiveDescendant()
+
+    await nextFrame()
+
+    if (this.autoScrollValue) { this.currentItem.scrollIntoView({ block: "nearest", inline: "nearest" }) }
+    if (this.hasNestedNavigationValue) { this.#activateNestedNavigableList() }
+
+    if (!skipFocus && this.focusOnSelectionValue) { this.currentItem.focus({ preventScroll: !this.autoScrollValue }) }
+  }
+
+  isSelected(item) {
+    return item === this.currentItem
+  }
+
   // Private
 
-  get #visibleItems() {
-    return this.itemTargets.filter(item => {
-      return item.checkVisibility() && !item.hidden
-    })
+  async #setCurrentFrom(element) {
+    const selectedItem = this.#visibleItems.find(item => item.contains(element))
+
+    if (selectedItem) {
+      await this.selectItem(selectedItem)
+    }
+  }
+
+  get #parentNavigableListController() {
+    const parentNavigableList = this.element.parentElement?.closest("[data-controller~='navigable-list']")
+    if (parentNavigableList) {
+      return this.application.getControllerForElementAndIdentifier(parentNavigableList, "navigable-list")
+    }
+    return null
+  }
+
+  async #selectCurrentElementInParent() {
+    const parentController = this.#parentNavigableListController
+    if (parentController) {
+      const parentItem = this.element.closest("[data-navigable-list-target~='item']")
+      const isAlreadySelected = parentController.isSelected(parentItem)
+      if (!isAlreadySelected) {
+        await parentController.selectItem(parentItem, true)
+      }
+    }
+  }
+
+  #clearSelection() {
+    for (const item of this.itemTargets) {
+      item.removeAttribute(this.selectionAttributeValue)
+    }
+  }
+
+  #refreshActiveDescendant() {
+    const id = this.currentItem?.getAttribute("id")
+    if (this.hasInputTarget && id) {
+      this.inputTarget.setAttribute("aria-activedescendant", id)
+    }
+  }
+
+  #activateNestedNavigableList() {
+    const nestedController = this.#nestedNavigableListController()
+    if (nestedController) {
+      nestedController.selectCurrentOrReset()
+      return true
+    }
+    return false
+  }
+
+  #nestedNavigableListController() {
+    const nestedElement = this.currentItem?.querySelector('[data-controller~="navigable-list"]')
+    if (nestedElement) {
+      return this.application.getControllerForElementAndIdentifier(nestedElement, "navigable-list")
+    }
+    return null
+  }
+
+  #activateManualSelection() {
+    const preselectedItem = this.itemTargets.find(item => item.hasAttribute(this.selectionAttributeValue))
+    if (preselectedItem) {
+      this.#setCurrentFrom(preselectedItem)
+    }
+  }
+
+  // Stimulus won't let you handle keydown events with different handlers for the same (nested) stimulus controllers.
+  #relayNavigationToParentNavigableList(event) {
+    const parentController = this.#parentNavigableListController
+    if (parentController) {
+      parentController.element.focus({ preventScroll: !this.autoScrollValue })
+      parentController.navigate(event)
+    }
   }
 
   #selectPrevious() {
@@ -71,44 +180,24 @@ export default class extends Controller {
     }
   }
 
-  async #setCurrentFrom(element) {
-    const selectedItem = this.#visibleItems.find(item => item.contains(element))
-    const id = selectedItem?.getAttribute("id")
-
-    if (selectedItem) {
-      this.#clearSelection()
-      selectedItem.setAttribute(this.selectionAttributeValue, "true")
-      this.currentItem = selectedItem
-      await nextFrame()
-      try {
-        this.currentItem.scrollIntoView({ block: "nearest", inline: "nearest" })
-      } catch (e) {}
-
-      if (this.focusOnSelectionValue) { this.currentItem.focus() }
-      if (this.hasInputTarget && id) {
-        this.inputTarget.setAttribute("aria-activedescendant", id)
-      }
-    }
-  }
-
-  #clearSelection() {
-    for (const item of this.itemTargets) {
-      item.removeAttribute(this.selectionAttributeValue)
-    }
-  }
-
-  #handleArrowKey(event, fn, preventDefault = true) {
+  #handleArrowKey(event, fn) {
     if (event.shiftKey || event.metaKey || event.ctrlKey) { return }
     fn.call()
-    if (preventDefault) { event.preventDefault() }
+    if (this.preventHandledKeysValue) {
+      event.preventDefault()
+    }
   }
 
   #clickCurrentItem(event) {
-    if (this.actionableItemsValue && this.currentItem && this.#visibleItems.length) {
+    if (this.actionableItemsValue && this.currentItem && this.#visibleItems.length && this.#isFocusContainedOnNavigableItem) {
       const clickableElement = this.currentItem.querySelector("a,button") || this.currentItem
       clickableElement.click()
       event.preventDefault()
     }
+  }
+
+  get #isFocusContainedOnNavigableItem() {
+    return !this.onlyActOnFocusedItemsValue || this.itemTargets.some(item => item === document.activeElement || item.contains(document.activeElement))
   }
 
   #toggleCurrentItem(event) {
@@ -126,20 +215,34 @@ export default class extends Controller {
     }
   }
 
+  get #visibleItems() {
+    return this.itemTargets.filter(item => {
+      return item.checkVisibility() && !item.hidden
+    })
+  }
+
   #keyHandlers = {
     ArrowDown(event) {
-      const selectMethod = this.reverseNavigationValue ? this.#selectPrevious.bind(this) : this.#selectNext.bind(this)
-      this.#handleArrowKey(event, selectMethod)
+      if (this.supportsVerticalNavigationValue) {
+        const selectMethod = this.reverseNavigationValue ? this.#selectPrevious.bind(this) : this.#selectNext.bind(this)
+        this.#handleArrowKey(event, selectMethod)
+      }
     },
     ArrowUp(event) {
-      const selectMethod = this.reverseNavigationValue ? this.#selectNext.bind(this) : this.#selectPrevious.bind(this)
-      this.#handleArrowKey(event, selectMethod)
+      if (this.supportsVerticalNavigationValue) {
+        const selectMethod = this.reverseNavigationValue ? this.#selectNext.bind(this) : this.#selectPrevious.bind(this)
+        this.#handleArrowKey(event, selectMethod)
+      }
     },
     ArrowRight(event) {
-      this.#handleArrowKey(event, this.#selectNext.bind(this), false)
+      if (this.supportsHorizontalNavigationValue) {
+        this.#handleArrowKey(event, this.#selectNext.bind(this))
+      }
     },
     ArrowLeft(event) {
-      this.#handleArrowKey(event, this.#selectPrevious.bind(this), false)
+      if (this.supportsHorizontalNavigationValue) {
+        this.#handleArrowKey(event, this.#selectPrevious.bind(this))
+      }
     },
     Enter(event) {
       if (event.shiftKey) {
