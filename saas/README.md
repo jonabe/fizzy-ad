@@ -1,6 +1,6 @@
 This is a Rails engine that [37signals](https://37signals.com/) bundles with [Fizzy](https://github.com/basecamp/fizzy) to offer the SaaS service at https://fizzy.do.
 
-## Working locally in SaaS mode
+## Development
 
 To make Fizzy run in SaaS mode, run this in the terminal:
 
