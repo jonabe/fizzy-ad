@@ -1,5 +1,6 @@
 require_relative "transaction_pinning"
 require_relative "signup"
+require_relative "../../rails_ext/active_record_tasks_database_tasks.rb"
 
 module Fizzy
   module Saas
@@ -41,7 +42,7 @@ module Fizzy
       # Load test mocks automatically in test environment
       initializer "fizzy_saas.test_mocks", after: :load_config_initializers do
         if Rails.env.test?
-          require "fizzy/saas/testing"
+          require_relative "testing"
         end
       end
 
@@ -77,6 +78,22 @@ module Fizzy
         end
 
         require_relative "metrics"
+      end
+
+      config.before_initialize do
+        config.console1984.protected_environments = %i[ production beta staging ]
+        config.console1984.ask_for_username_if_empty = true
+        config.console1984.base_record_class = "::SaasRecord"
+
+        config.audits1984.base_controller_class = "::SaasAdminController"
+        config.audits1984.auditor_class = "::Identity"
+        config.audits1984.auditor_name_attribute = :email_address
+
+        if config.console1984.protected_environments.include?(Rails.env.to_sym)
+          config.active_record.encryption.primary_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY")
+          config.active_record.encryption.deterministic_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY")
+          config.active_record.encryption.key_derivation_salt = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT")
+        end
       end
 
       config.to_prepare do
