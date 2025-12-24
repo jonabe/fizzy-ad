@@ -11,6 +11,9 @@ class Board < ApplicationRecord
   has_many :tags, -> { distinct }, through: :cards
   has_many :events
   has_many :webhooks, dependent: :destroy
+  has_many :columns, dependent: :destroy
+
+  after_create :create_default_columns
 
   scope :alphabetically, -> { order("lower(name)") }
   scope :ordered_by_recently_accessed, -> { merge(Access.ordered_by_recently_accessed) }
@@ -24,11 +27,22 @@ class Board < ApplicationRecord
     {}
   end
 
+  # Set metadata by converting hash to YAML for storage in description field
+  def metadata=(hash)
+    self.description = hash.to_yaml
+  end
+
   private
     def valid_yaml_metadata
       return if description.blank?
       YAML.safe_load(description, permitted_classes: [Symbol], aliases: true)
     rescue Psych::SyntaxError => e
       errors.add(:description, "must be valid YAML: #{e.message}")
+    end
+
+    def create_default_columns
+      %w[Backlog Ready In\ Progress Review Done].each do |name|
+        columns.create!(name: name)
+      end
     end
 end

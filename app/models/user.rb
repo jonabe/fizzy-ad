@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_secure_token :api_token
 
   validates :name, presence: true
+  validates :role, inclusion: { in: %w[pm architect developer qa], allow_nil: true }
 
   has_many :comments, inverse_of: :creator, dependent: :destroy
 
