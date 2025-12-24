@@ -233,6 +233,14 @@ Rails.application.routes.draw do
   get "/collections/:id", to: redirect { |params, request| "#{request.script_name}/boards/#{params[:id]}" }
   get "/public/collections/:id", to: redirect { |params, request| "#{request.script_name}/public/boards/#{params[:id]}" }
 
+  # Health check endpoint for Docker and monitoring
+  get "/health", to: "health#show"
+
+  # API endpoints for Factory CLI and Agent Lab
+  namespace :api do
+    resources :boards, only: [ :index, :show, :create, :update, :destroy ]
+  end
+
   get "up", to: "rails/health#show", as: :rails_health_check
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "pwa#service_worker"

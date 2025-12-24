@@ -6,6 +6,9 @@ class User < ApplicationRecord
   belongs_to :account
   belongs_to :identity, optional: true
 
+  # API token for programmatic access (Factory CLI, Agent Lab)
+  has_secure_token :api_token
+
   validates :name, presence: true
 
   has_many :comments, inverse_of: :creator, dependent: :destroy
