@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.2].define(version: 2025_12_10_054934) do
+ActiveRecord::Schema[8.2].define(version: 2025_12_24_162433) do
   create_table "accesses", id: :uuid, force: :cascade do |t|
     t.datetime "accessed_at"
     t.uuid "account_id", null: false
@@ -146,10 +146,13 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_10_054934) do
     t.uuid "account_id", null: false
     t.boolean "all_access", default: false, null: false
     t.datetime "created_at", null: false
+    t.integer "created_by_id"
     t.uuid "creator_id", null: false
+    t.text "description", limit: 65535, default: ""
     t.string "name", limit: 255, null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_boards_on_account_id"
+    t.index ["created_by_id"], name: "index_boards_on_created_by_id"
     t.index ["creator_id"], name: "index_boards_on_creator_id"
   end
 
@@ -201,6 +204,7 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_10_054934) do
 
   create_table "cards", id: :uuid, force: :cascade do |t|
     t.uuid "account_id", null: false
+    t.integer "assigned_to_id"
     t.uuid "board_id", null: false
     t.uuid "column_id"
     t.datetime "created_at", null: false
@@ -208,12 +212,15 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_10_054934) do
     t.date "due_on"
     t.datetime "last_active_at", null: false
     t.bigint "number", null: false
+    t.integer "position", default: 0, null: false
     t.string "status", limit: 255, default: "drafted", null: false
     t.string "title", limit: 255
     t.datetime "updated_at", null: false
     t.index ["account_id", "last_active_at", "status"], name: "index_cards_on_account_id_and_last_active_at_and_status"
     t.index ["account_id", "number"], name: "index_cards_on_account_id_and_number", unique: true
+    t.index ["assigned_to_id"], name: "index_cards_on_assigned_to_id"
     t.index ["board_id"], name: "index_cards_on_board_id"
+    t.index ["column_id", "position"], name: "index_cards_on_column_id_and_position"
     t.index ["column_id"], name: "index_cards_on_column_id"
   end
 
@@ -479,7 +486,7 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_10_054934) do
     t.string "operation", limit: 255, null: false
     t.uuid "recordable_id"
     t.string "recordable_type", limit: 255
-    t.string "request_id"
+    t.string "request_id", limit: 255
     t.uuid "user_id"
     t.index ["account_id"], name: "index_storage_entries_on_account_id"
     t.index ["blob_id"], name: "index_storage_entries_on_blob_id"
@@ -533,6 +540,7 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_10_054934) do
   create_table "users", id: :uuid, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.boolean "active", default: true, null: false
+    t.string "api_token", limit: 32
     t.datetime "created_at", null: false
     t.uuid "identity_id"
     t.string "name", limit: 255, null: false
@@ -541,6 +549,7 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_10_054934) do
     t.datetime "verified_at"
     t.index ["account_id", "identity_id"], name: "index_users_on_account_id_and_identity_id", unique: true
     t.index ["account_id", "role"], name: "index_users_on_account_id_and_role"
+    t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["identity_id"], name: "index_users_on_identity_id"
   end
 
@@ -595,6 +604,9 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_10_054934) do
     t.index ["account_id"], name: "index_webhooks_on_account_id"
     t.index ["board_id", "subscribed_actions"], name: "index_webhooks_on_board_id_and_subscribed_actions"
   end
+
+  add_foreign_key "boards", "users", column: "created_by_id"
+  add_foreign_key "cards", "users", column: "assigned_to_id"
   execute "CREATE VIRTUAL TABLE search_records_fts USING fts5(\n        title,\n        content,\n        tokenize='porter'\n      )"
 
 end
