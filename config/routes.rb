@@ -236,16 +236,6 @@ Rails.application.routes.draw do
   # Health check endpoint for Docker and monitoring
   get "/health", to: "health#show"
 
-  # API endpoints for Factory CLI and Agent Lab
-  namespace :api do
-    resources :boards, only: [ :index, :show, :create, :update, :destroy ]
-    resources :cards, only: [ :index, :show, :create, :update, :destroy ] do
-      member do
-        post :move
-      end
-    end
-  end
-
   get "up", to: "rails/health#show", as: :rails_health_check
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "pwa#service_worker"
