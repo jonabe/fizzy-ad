@@ -2,7 +2,7 @@ module User::Role
   extend ActiveSupport::Concern
 
   included do
-    enum :role, %i[ owner admin member system ].index_by(&:itself), scopes: false
+    enum :role, %i[ owner admin member system pm architect developer critic qa discriminator coordinator clarifier designer scribe ].index_by(&:itself), scopes: false
 
     scope :owner, -> { where(active: true, role: :owner) }
     scope :admin, -> { where(active: true, role: %i[ owner admin ]) }

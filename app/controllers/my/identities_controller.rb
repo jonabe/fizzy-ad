@@ -2,6 +2,6 @@ class My::IdentitiesController < ApplicationController
   disallow_account_scope
 
   def show
-    @identity = Current.identity
+    @users = Current.identity&.users || [Current.user].compact
   end
 end
