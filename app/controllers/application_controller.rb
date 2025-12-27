@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   include TurboFlash, ViewTransitions
   include RoutingHeaders
 
+  skip_forgery_protection if Rails.env.development?
+
   etag { "v1" }
   stale_when_importmap_changes
   allow_browser versions: :modern

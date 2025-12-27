@@ -2,6 +2,12 @@ Rails.application.routes.draw do
   namespace :factory do
     resources :boards, only: [:create, :update] do
       resources :columns, only: [:create]
+      resources :cards, only: [:create]
+    end
+    resources :cards, only: [] do
+      post :assign, on: :member
+      post :move, on: :member
+      patch :update_full, on: :member
     end
   end
   root "events#index"

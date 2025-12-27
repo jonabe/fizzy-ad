@@ -1,6 +1,5 @@
 module Factory
   class ApplicationController < ActionController::API
-    # Skip CSRF for API
-    # Permissive auth for smoke test
+    # API controllers don't need CSRF protection
   end
 end

@@ -24,6 +24,10 @@ class CardsController < ApplicationController
   end
 
   def show
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   def edit
@@ -53,7 +57,8 @@ class CardsController < ApplicationController
     end
 
     def set_card
-      @card = Current.user.accessible_cards.find_by!(number: params[:id])
+      @card = Current.user.accessible_cards.find_by(id: params[:id]) ||
+              Current.user.accessible_cards.find_by!(number: params[:id])
     end
 
     def ensure_permission_to_administer_card
