@@ -87,6 +87,7 @@ Rails.application.configure do
 
   config.hosts = [
     "fizzy.localhost",
+    "fizzy",
     "localhost",
     "127.0.0.1",
     /fizzy-\d+/,  # review apps: fizzy-123, fizzy-456:3000

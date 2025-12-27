@@ -18,4 +18,9 @@ json.cache! card do
   json.creator card.creator, partial: "users/user", as: :user
 
   json.comments_url card_comments_url(card)
+
+  # Agent Lab Helpers
+  json.column_name card.column.try(:name)
+  json.column_position card.try(:position)
+  json.assignee card.assignees.first, partial: "users/user", as: :user if card.assignees.any?
 end

@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  namespace :factory do
+    resources :boards, only: [:create, :update] do
+      resources :columns, only: [:create]
+    end
+  end
   root "events#index"
 
   namespace :account do
@@ -22,115 +27,123 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :boards do
-    scope module: :boards do
-      resource :subscriptions
-      resource :involvement
-      resource :publication
-      resource :entropy
+  def draw_platform_routes
+    resources :boards do
+      scope module: :boards do
+        resource :subscriptions
+        resource :involvement
+        resource :publication
+        resource :entropy
 
-      namespace :columns do
-        resource :not_now
-        resource :stream
-        resource :closed
-      end
-
-      resources :columns
-    end
-
-    resources :cards, only: :create
-
-    resources :webhooks do
-      scope module: :webhooks do
-        resource :activation, only: :create
-      end
-    end
-  end
-
-  resources :columns, only: [] do
-    resource :left_position, module: :columns
-    resource :right_position, module: :columns
-  end
-
-  namespace :columns do
-    resources :cards do
-      scope module: :cards do
-        namespace :drops do
+        namespace :columns do
           resource :not_now
           resource :stream
-          resource :closure
-          resource :column
+          resource :closed
+        end
+
+        resources :columns
+      end
+
+      resources :cards, only: :create
+
+      resources :webhooks do
+        scope module: :webhooks do
+          resource :activation, only: :create
         end
       end
     end
-  end
 
-  namespace :cards do
-    resources :previews
-  end
+    resources :columns, only: [] do
+      resource :left_position, module: :columns
+      resource :right_position, module: :columns
+    end
 
-  resources :cards do
-    scope module: :cards do
-      resource :board
-      resource :closure
-      resource :column
-      resource :goldness
-      resource :image
-      resource :not_now
-      resource :pin
-      resource :publish
-      resource :reading
-      resource :triage
-      resource :watch
-      resource :reading
+    namespace :columns do
+      resources :cards do
+        scope module: :cards do
+          namespace :drops do
+            resource :not_now
+            resource :stream
+            resource :closure
+            resource :column
+          end
+        end
+      end
+    end
 
-      resources :assignments
-      resources :steps
-      resources :taggings
+    namespace :cards do
+      resources :previews
+    end
 
-      resources :comments do
-        resources :reactions, module: :comments
+    resources :cards do
+      scope module: :cards do
+        resource :board
+        resource :closure
+        resource :column
+        resource :goldness
+        resource :image
+        resource :not_now
+        resource :pin
+        resource :publish
+        resource :reading
+        resource :triage
+        resource :watch
+        resource :reading
+
+        resources :assignments
+        resources :steps
+        resources :taggings
+
+        resources :comments do
+          resources :reactions, module: :comments
+        end
+      end
+    end
+
+    resources :tags, only: :index
+
+    namespace :notifications do
+      resource :settings
+      resource :unsubscribe
+    end
+
+    resources :notifications do
+      scope module: :notifications do
+        get "tray", to: "trays#show", on: :collection
+
+        resource :reading
+        collection do
+          resource :bulk_reading, only: :create
+        end
+      end
+    end
+
+    resource :search
+    namespace :searches do
+      resources :queries
+    end
+
+    resources :filters do
+      scope module: :filters do
+        collection do
+          resource :settings_refresh, only: :create
+        end
+      end
+    end
+
+    resources :events, only: :index
+    namespace :events do
+      resources :days
+      namespace :day_timeline do
+        resources :columns, only: :show
       end
     end
   end
 
-  resources :tags, only: :index
+  draw_platform_routes
 
-  namespace :notifications do
-    resource :settings
-    resource :unsubscribe
-  end
-
-  resources :notifications do
-    scope module: :notifications do
-      get "tray", to: "trays#show", on: :collection
-
-      resource :reading
-      collection do
-        resource :bulk_reading, only: :create
-      end
-    end
-  end
-
-  resource :search
-  namespace :searches do
-    resources :queries
-  end
-
-  resources :filters do
-    scope module: :filters do
-      collection do
-        resource :settings_refresh, only: :create
-      end
-    end
-  end
-
-  resources :events, only: :index
-  namespace :events do
-    resources :days
-    namespace :day_timeline do
-      resources :columns, only: :show
-    end
+  scope ":account_slug", as: :scoped do
+    draw_platform_routes
   end
 
   resources :qr_codes
